@@ -1,0 +1,321 @@
+:root {
+  --bg-top: #fff3dc;
+  --bg-bottom: #ffe7bd;
+  --card: #fffdf7;
+  --ink: #3b2b1a;
+  --ink-soft: #7a5c38;
+  --orange: #e8590c;
+  --orange-dark: #c2410c;
+  --amber: #f59e0b;
+  --gold: #fbbf24;
+  --radius: 22px;
+  --shadow: 0 22px 45px -20px rgba(170, 90, 15, 0.4);
+  --soft-shadow: 0 10px 24px -14px rgba(170, 90, 15, 0.35);
+}
+
+* { box-sizing: border-box; }
+
+[hidden] { display: none !important; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(1100px 550px at 85% -10%, #ffe9bd 0%, transparent 60%),
+    radial-gradient(850px 500px at -12% 25%, #ffdf9e 0%, transparent 55%),
+    linear-gradient(180deg, var(--bg-top), var(--bg-bottom));
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 48px 20px 40px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Soft decorative blobs floating behind everything */
+.background-blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  opacity: 0.5;
+  z-index: 0;
+  pointer-events: none;
+}
+.blob-1 {
+  width: 340px; height: 340px;
+  background: rgba(245, 183, 35, 0.55);
+  top: -90px; right: -80px;
+  animation: float 9s ease-in-out infinite;
+}
+.blob-2 {
+  width: 280px; height: 280px;
+  background: rgba(232, 89, 12, 0.18);
+  bottom: -70px; left: -70px;
+  animation: float 11s ease-in-out infinite reverse;
+}
+
+/* ------------------------------ Hero ------------------------------ */
+.hero { text-align: center; margin-bottom: 34px; animation: fadeUp 0.6s ease both; }
+
+.logo { display: inline-block; animation: float 4s ease-in-out infinite; }
+.logo svg { filter: drop-shadow(0 10px 16px rgba(170, 90, 15, 0.35)); }
+
+.brand {
+  font-family: "Baloo 2", "Nunito", sans-serif;
+  font-weight: 800;
+  font-size: clamp(3rem, 8vw, 4.8rem);
+  letter-spacing: 4px;
+  margin: 10px 0 2px;
+  background: linear-gradient(120deg, var(--orange), var(--amber) 65%, var(--orange));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.tagline {
+  font-family: "Baloo 2", "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  color: var(--ink-soft);
+  margin: 4px 0 8px;
+}
+
+.description { color: var(--ink-soft); margin: 0; font-size: 1.02rem; }
+
+/* ------------------------------ Cards ------------------------------ */
+.card {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(232, 89, 12, 0.14);
+  padding: 24px;
+}
+
+.upload-card { animation: fadeUp 0.6s ease 0.12s both; }
+
+/* ------------------------------ Dropzone --------------------------- */
+.dropzone {
+  border: 3px dashed rgba(232, 89, 12, 0.45);
+  border-radius: var(--radius);
+  background: rgba(255, 253, 240, 0.65);
+  padding: 44px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.25s ease, background 0.25s ease, transform 0.25s ease;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dropzone:hover, .dropzone:focus-visible {
+  border-color: var(--orange);
+  background: rgba(255, 253, 240, 1);
+  outline: none;
+}
+.dropzone.dragover {
+  border-color: var(--orange);
+  background: #fff2d6;
+  transform: scale(1.015);
+}
+
+.drop-icon { font-size: 3rem; animation: bob 2.4s ease-in-out infinite; display: inline-block; }
+.drop-title { font-family: "Baloo 2", "Nunito", sans-serif; font-weight: 700; font-size: 1.25rem; margin: 10px 0 4px; }
+.drop-sub { color: var(--ink-soft); margin: 0; font-size: 0.95rem; }
+
+.dropzone-preview { position: relative; width: 100%; }
+.dropzone-preview img {
+  max-width: 100%;
+  max-height: 380px;
+  border-radius: 16px;
+  display: block;
+  margin: 0 auto;
+  box-shadow: var(--soft-shadow);
+}
+.remove-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--ink);
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: var(--soft-shadow);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+.remove-btn:hover { background: var(--orange); transform: rotate(90deg); }
+
+/* ------------------------------ Buttons ---------------------------- */
+.btn {
+  font-family: "Baloo 2", "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 1.02rem;
+  padding: 13px 26px;
+  border-radius: 999px;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease;
+}
+.btn:active { transform: translateY(2px) scale(0.99); }
+
+.btn.primary {
+  background: linear-gradient(135deg, var(--orange), var(--amber));
+  color: #fff;
+  box-shadow: 0 14px 26px -12px rgba(232, 89, 12, 0.7);
+}
+.btn.primary:hover:not(:disabled) { transform: translateY(-2px) scale(1.02); box-shadow: 0 18px 30px -12px rgba(232, 89, 12, 0.8); }
+.btn.primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.btn.outline {
+  background: transparent;
+  color: var(--orange-dark);
+  border: 2px solid var(--orange);
+}
+.btn.outline:hover { background: rgba(232, 89, 12, 0.08); transform: translateY(-2px); }
+
+.upload-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.fine-print { text-align: center; color: var(--ink-soft); font-size: 0.82rem; margin: 14px 0 0; }
+
+/* ------------------------------ Error ------------------------------ */
+.error-card {
+  background: #fff1ec;
+  border: 2px solid rgba(232, 89, 12, 0.35);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-top: 22px;
+  text-align: center;
+  animation: shake 0.5s ease both, fadeUp 0.4s ease both;
+}
+.error-title { font-family: "Baloo 2", "Nunito", sans-serif; font-weight: 800; margin: 0 0 6px; }
+.error-message { color: var(--ink-soft); margin: 0 0 16px; }
+
+/* ------------------------------ Results ---------------------------- */
+.results { margin-top: 26px; animation: fadeUp 0.6s ease both; display: flex; flex-direction: column; gap: 22px; align-items: center; }
+
+.score-card { width: 100%; text-align: center; background: linear-gradient(160deg, #fff7e3, #fffdf7 55%); }
+.score-label {
+  font-family: "Baloo 2", "Nunito", sans-serif;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--orange-dark);
+  font-size: 0.95rem;
+}
+.score-number { font-family: "Baloo 2", "Nunito", sans-serif; font-weight: 800; font-size: clamp(3.2rem, 9vw, 5rem); line-height: 1.1; margin: 4px 0 6px; }
+.score-number span { background: linear-gradient(120deg, var(--orange), var(--amber)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.score-number .score-denom { font-size: 0.4em; color: var(--ink-soft); -webkit-text-fill-color: var(--ink-soft); }
+.band { font-family: "Baloo 2", "Nunito", sans-serif; font-weight: 700; font-size: 1.35rem; }
+.band-emoji { font-size: 1.6rem; margin-right: 6px; }
+.verdict {
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 1.05rem;
+  margin: 12px auto 0;
+  max-width: 480px;
+}
+
+.result-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; width: 100%; }
+
+.panel-title { font-family: "Baloo 2", "Nunito", sans-serif; font-weight: 800; font-size: 1.1rem; margin: 0 0 14px; }
+
+.image-panel { text-align: center; }
+.image-panel canvas { max-width: 100%; border-radius: 14px; display: block; margin: 0 auto; box-shadow: var(--soft-shadow); background: #ffe; }
+
+.legend { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-top: 14px; }
+.legend-item { display: flex; align-items: center; gap: 7px; font-size: 0.9rem; color: var(--ink-soft); }
+.legend-dot { width: 13px; height: 13px; border-radius: 50%; display: inline-block; }
+
+.total-note { color: var(--ink-soft); font-size: 0.95rem; margin: 14px 0 0; }
+.total-note b { color: var(--orange-dark); }
+
+.stats-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.stats-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  background: rgba(245, 199, 116, 0.16);
+  border: 1px solid rgba(232, 89, 12, 0.12);
+  border-radius: 14px;
+  padding: 11px 14px;
+}
+.stats-list li > span:first-child { color: var(--ink-soft); font-weight: 700; }
+.stats-list li > span:last-child { font-family: "Baloo 2", "Nunito", sans-serif; font-weight: 800; color: var(--orange-dark); }
+
+.dev-note { color: var(--ink-soft); font-size: 0.85rem; margin: 14px 0 0; border-top: 1px dashed rgba(232, 89, 12, 0.3); padding-top: 12px; }
+.dev-note b { color: var(--orange-dark); }
+
+/* ------------------------------ Loading ---------------------------- */
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  background: rgba(255, 243, 220, 0.92);
+  backdrop-filter: blur(6px);
+  animation: fadeIn 0.25s ease both;
+}
+.spinner svg { animation: spin 2.6s linear infinite; filter: drop-shadow(0 12px 18px rgba(170, 90, 15, 0.4)); }
+.loading-message {
+  font-family: "Baloo 2", "Nunito", sans-serif;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: var(--orange-dark);
+  text-align: center;
+  padding: 0 20px;
+}
+
+/* ------------------------------ Footer ----------------------------- */
+.footer { text-align: center; color: var(--ink-soft); font-size: 0.85rem; margin-top: 40px; animation: fadeUp 0.6s ease 0.2s both; }
+
+/* ------------------------------ Animations ------------------------- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+/* ------------------------------ Responsive ------------------------- */
+@media (max-width: 760px) {
+  .container { padding-top: 28px; }
+  .result-grid { grid-template-columns: 1fr; }
+  .upload-actions .btn { width: 100%; }
+  .dropzone { padding: 30px 14px; min-height: 200px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

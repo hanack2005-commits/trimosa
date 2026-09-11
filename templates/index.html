@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TRIMOSA · Three corners. Zero purpose.</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#129359;</text></svg>" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../static/style.css" />
+</head>
+<body>
+  <div class="background-blob blob-1"></div>
+  <div class="background-blob blob-2"></div>
+
+  <main class="container">
+    <header class="hero">
+      <div class="logo" aria-hidden="true">
+        <svg viewBox="0 0 100 90" width="84" height="76">
+          <path d="M50 8 L94 78 Q72 88 50 78 Q28 88 6 78 Z" fill="#F5B723" stroke="#E8590C" stroke-width="5" stroke-linejoin="round" />
+          <path d="M50 8 Q50 38 60 60 M50 8 Q50 38 40 60 M50 8 L94 78 M50 8 L6 78" fill="none" stroke="#E8590C" stroke-width="4" stroke-linecap="round" opacity="0.55" />
+          <circle cx="37" cy="46" r="4" fill="#3B2B1A" />
+          <circle cx="63" cy="46" r="4" fill="#3B2B1A" />
+          <path d="M40 60 Q50 68 60 60" fill="none" stroke="#3B2B1A" stroke-width="4" stroke-linecap="round" />
+        </svg>
+      </div>
+      <h1 class="brand">TRIMOSA</h1>
+      <p class="tagline">Three corners. Zero purpose.</p>
+      <p class="description">Advanced technology solving a problem nobody had.</p>
+    </header>
+
+    <section class="card upload-card">
+      <div class="dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload a samosa image">
+        <input type="file" id="fileInput" accept="image/jpeg,image/png" hidden />
+        <div class="dropzone-idle" id="dzIdle">
+          <div class="drop-icon" aria-hidden="true">🥟</div>
+          <p class="drop-title">Drag &amp; drop your samosa here</p>
+          <p class="drop-sub">or tap to browse — JPG, JPEG or PNG</p>
+        </div>
+        <div class="dropzone-preview" id="dzPreview" hidden>
+          <img id="previewImg" alt="Your samosa" />
+          <button type="button" class="remove-btn" id="removeBtn" aria-label="Remove image">✕</button>
+        </div>
+      </div>
+
+      <div class="upload-actions">
+        <button type="button" class="btn outline" id="uploadBtn">Upload Samosa</button>
+        <button type="button" class="btn primary" id="analyzeBtn" disabled>Analyze My Samosa</button>
+      </div>
+      <p class="fine-print">Warning: the samosa has not consented to this analysis.</p>
+    </section>
+
+    <section class="error-card" id="errorCard" hidden>
+      <p class="error-title">🚨 Analysis report: catastrophic</p>
+      <p class="error-message" id="errorMessage"></p>
+      <button type="button" class="btn outline" id="dismissErrorBtn">Dismiss this debacle</button>
+    </section>
+
+    <section class="results" id="results" hidden>
+      <div class="card score-card">
+        <div class="score-label">TRIMOSA SCORE</div>
+        <div class="score-number">
+          <span id="scoreValue">--</span>
+          <span class="score-denom">/100</span>
+        </div>
+        <div class="band">
+          <span class="band-emoji" id="bandEmoji">🔺</span>
+          <span id="bandName">Respectable Triangle</span>
+        </div>
+        <p class="verdict" id="verdictLine"></p>
+      </div>
+
+      <div class="result-grid">
+        <div class="card image-panel">
+          <h2 class="panel-title">Forensic Triangle Overlay</h2>
+          <canvas id="resultCanvas"></canvas>
+          <div class="legend" id="legend"></div>
+          <p class="total-note">Total angle: <b id="totalAngle">--</b></p>
+        </div>
+
+        <div class="card stats-panel">
+          <h2 class="panel-title">Geometric Evidence</h2>
+          <ul class="stats-list" id="statsList"></ul>
+          <p class="dev-note" id="devNote"></p>
+        </div>
+      </div>
+
+      <button type="button" class="btn primary" id="againBtn">Analyze Another Samosa</button>
+    </section>
+
+    <footer class="footer">
+      <p>© 2026 Trimosa Laboratories™ — measuring triangles that never asked to be measured.</p>
+    </footer>
+  </main>
+
+  <div class="loading-overlay" id="loadingOverlay" hidden>
+    <div class="spinner" aria-hidden="true">
+      <svg viewBox="0 0 100 90" width="72" height="66">
+        <path d="M50 8 L94 78 Q72 88 50 78 Q28 88 6 78 Z" fill="#F5B723" stroke="#E8590C" stroke-width="5" stroke-linejoin="round" />
+      </svg>
+    </div>
+    <p class="loading-message" id="loadingMsg">Consulting the laws of geometry...</p>
+  </div>
+
+  <script src="../static/script.js"></script>
+</body>
+</html>
