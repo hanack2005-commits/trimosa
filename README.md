@@ -2,46 +2,46 @@
 
 
 
-# [Trimosa] 🎯
+# Trimosa 🎯
 
 
 ## Basic Details
-### Team Name: [Hana Dhaniya]
+### Team Name: Hana Dhaniya
 
 
 ### Team Members
-- Team Lead: [Hana CK] - [KAHM Unity Womens College (Autonomous),Manjeri]
-- Member 2: [Dhaniya KM] - [KAHM Unity Womens College (Autonomous),Manjeri]
+- Team Lead: Hana CK - KAHM Unity Womens College (Autonomous),Manjeri
+- Member 2: Dhaniya KM - KAHM Unity Womens College (Autonomous),Manjeri
 
 ### Project Description
-[Trimosa is a fun AI/computer-vision-based food shape analysis project that detects an object's significant corners using OpenCV. It analyzes samosa geometry, measures corner angles, and calculates how closely a three-corner shape matches the ideal triangular samosa.]
+Trimosa is a fun AI/computer-vision-based food shape analysis project that detects an object's significant corners using OpenCV. It analyzes samosa geometry, measures corner angles, and calculates how closely a three-corner shape matches the ideal triangular samosa.
 
 ### The Problem (that doesn't exist)
-[Samosas are everywhere, but nobody is asking the important question: Are their corners geometrically perfect? Humanity has survived far too long without scientifically judging samosa triangles.]
+Samosas are everywhere, but nobody is asking the important question: Are their corners geometrically perfect? Humanity has survived far too long without scientifically judging samosa triangles.
 
 ### The Solution (that nobody asked for)
-[Trimosa uses computer vision to detect an uploaded food's shape, count its significant corners, and measure their angles. If it finds three corners, it compares them with the ideal 60°–60°–60° samosa and awards a completely unnecessary Trimosa Perfection Score.]
+Trimosa uses computer vision to detect an uploaded food's shape, count its significant corners, and measure their angles. If it finds three corners, it compares them with the ideal 60°–60°–60° samosa and awards a completely unnecessary Trimosa Perfection Score.
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Python, HTML, CSS, JavaScript]
-- [Flask]
-- [OpenCV (opencv-python), NumPy, Pillow]
-- [Visual Studio Code, Git, GitHub, Render, Web Browser]
+- Python, HTML, CSS, JavaScript
+- Flask
+- OpenCV (opencv-python), NumPy, Pillow
+- Visual Studio Code, Git, GitHub, Render, Web Browser
 
 For Hardware:
-- [Laptop/Desktop computer]
-- [Minimum 4 GB RAM, dual-core processor, and sufficient storage to run Python and OpenCV]
-- [Tools required: Smartphone/camera for capturing food images and an internet connection for accessing the deployed web application]
+- Laptop/Desktop computer
+- Minimum 4 GB RAM, dual-core processor, and sufficient storage to run Python and OpenCV
+- Tools required: Smartphone/camera for capturing food images and an internet connection for accessing the deployed web application
 
 ### Implementation
 For Software:
 # Installation
-[pip install -r requirements.txt]
+pip install -r requirements.txt
 
 # Run
-[python app.py]
+python app.py
 
 ### Project Documentation
 For Software:
@@ -133,21 +133,21 @@ For Hardware:
 
 ### Project Demo
 # Video
-[(https://drive.google.com/file/d/1tZsVkTSZ6CENNhpf8S8V25zECZ7BJHGU/view?usp=drive_link)]
+(https://drive.google.com/file/d/1tZsVkTSZ6CENNhpf8S8V25zECZ7BJHGU/view?usp=drive_link)
 *The demo video shows the complete working of Trimosa — uploading a food image, scanning and processing the image, detecting significant corners, analyzing the shape and corner angles, and displaying the final Trimosa score and verdict for a three-corner samosa.*
 
 # Additional Demos
-[Add any extra demo materials/links]
+Add any extra demo materials/links
 
 ## Team Contributions
-- [Hana CK]: [Developed the frontend interface, UI/UX design, animations, testing, documentation, and project presentation.]
-- [Dhaniya KM]: [Developed the OpenCV-based image processing, shape and corner detection, angle calculations, and integration of the analysis system with the frontend.]
+- Hana CK: Developed the frontend interface, UI/UX design, animations, testing, documentation, and project presentation.
+- Dhaniya KM: Developed the OpenCV-based image processing, shape and corner detection, angle calculations, and integration of the analysis system with the frontend.
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
 
-![Static Badge](https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
-![Static Badge](https://img.shields.io/badge/UselessProjects--26-26?link=https%3A%2F%2Ftinkerhub.org%2Fevents%2F1M8ORET9A1%2Fuseless-projects-3.0)
+!Static Badge(https://img.shields.io/badge/TinkerHub-24?color=%23000000&link=https%3A%2F%2Fwww.tinkerhub.org%2F)
+!Static Badge(https://img.shields.io/badge/UselessProjects--26-26?link=https%3A%2F%2Ftinkerhub.org%2Fevents%2F1M8ORET9A1%2Fuseless-projects-3.0)
 
 
 
