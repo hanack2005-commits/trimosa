@@ -47,10 +47,10 @@ For Software:
 For Software:
 
 # Screenshots (Add at least 3)
-<img src="image4.png">
+<img src="image3.png">
 *Trimosa home page showing the image upload interface where users can upload a food image for shape and corner analysis.*
 
-<img src="image3.png">
+<img src="image4.png">
 *AImage preview and scanning stage, where Trimosa prepares the uploaded food image for computer vision analysis.*
 
 <img src="image2.png">
