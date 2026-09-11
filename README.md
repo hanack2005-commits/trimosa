@@ -2,64 +2,115 @@
 
 
 
-# [Project Name] 🎯
+# [Trimosa] 🎯
 
 
 ## Basic Details
-### Team Name: [Name]
+### Team Name: [Hana Dhaniya]
 
 
 ### Team Members
-- Team Lead: [Name] - [College]
-- Member 2: [Name] - [College]
-- Member 3: [Name] - [College]
+- Team Lead: [Hana CK] - [KAHM Unity Womens College (Autonomous),Manjeri]
+- Member 2: [Dhaniya KM] - [KAHM Unity Womens College (Autonomous),Manjeri]
 
 ### Project Description
-[2-3 lines about what your project does]
+[Trimosa is a fun AI/computer-vision-based food shape analysis project that detects an object's significant corners using OpenCV. It analyzes samosa geometry, measures corner angles, and calculates how closely a three-corner shape matches the ideal triangular samosa.]
 
 ### The Problem (that doesn't exist)
-[What ridiculous problem are you solving?]
+[Samosas are everywhere, but nobody is asking the important question: Are their corners geometrically perfect? Humanity has survived far too long without scientifically judging samosa triangles.]
 
 ### The Solution (that nobody asked for)
-[How are you solving it? Keep it fun!]
+[Trimosa uses computer vision to detect an uploaded food's shape, count its significant corners, and measure their angles. If it finds three corners, it compares them with the ideal 60°–60°–60° samosa and awards a completely unnecessary Trimosa Perfection Score.]
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- [Languages used]
-- [Frameworks used]
-- [Libraries used]
-- [Tools used]
+- [Python, HTML, CSS, JavaScript]
+- [Flask]
+- [OpenCV (opencv-python), NumPy, Pillow]
+- [Visual Studio Code, Git, GitHub, Render, Web Browser]
 
 For Hardware:
-- [List main components]
-- [List specifications]
-- [List tools required]
+- [Laptop/Desktop computer]
+- [Minimum 4 GB RAM, dual-core processor, and sufficient storage to run Python and OpenCV]
+- [Tools required: Smartphone/camera for capturing food images and an internet connection for accessing the deployed web application]
 
 ### Implementation
 For Software:
 # Installation
-[commands]
+[pip install -r requirements.txt]
 
 # Run
-[commands]
+[python app.py]
 
 ### Project Documentation
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](Add screenshot 1 here with proper name)
-*Add caption explaining what this shows*
+![Screenshot1](<img src="img4.png">)
+*Trimosa home page showing the image upload interface where users can upload a food image for shape and corner analysis.*
 
-![Screenshot2](Add screenshot 2 here with proper name)
-*Add caption explaining what this shows*
+![Screenshot2](<img src="img3.png">)
+*AImage preview and scanning stage, where Trimosa prepares the uploaded food image for computer vision analysis.*
 
-![Screenshot3](Add screenshot 3 here with proper name)
-*Add caption explaining what this shows*
+![Screenshot3](<img src="img2.png">)
+**Shape analysis result showing the detected significant corners and geometric information identified using OpenCV.*
+
+![Screenshot3](<img src="img1.png">)
+*Final Trimosa result displaying the detected corner count, shape classification, and analysis verdict.*
 
 # Diagrams
-![Workflow](Add your workflow/architecture diagram here)
-*Add caption explaining your workflow*
+![Workflow](
+┌─────────────────────┐
+│     User / Browser  │
+│  Upload Food Image  │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│   HTML / CSS / JS   │
+│    Web Interface    │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│    Flask Backend    │
+│     Python API      │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│ OpenCV Image        │
+│ Preprocessing       │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│ Contour & Shape     │
+│ Detection           │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│ Significant Corner  │
+│ Detection           │
+└──────────┬──────────┘
+           ↓
+┌─────────────────────┐
+│ Corner Count &      │
+│ Angle Calculation   │
+└──────────┬──────────┘
+           ↓
+      ┌────┴─────┐
+      │3 Corners?│
+      └──┬────┬──┘
+       YES    NO
+        ↓      ↓
+  Trimosa    Display
+   Score     Detected
+ + Verdict    Shape
+        └──┬───┘
+           ↓
+┌─────────────────────┐
+│ Results Displayed   │
+│     to User         │
+└─────────────────────┘)
+*Trimosa workflow: The uploaded food image is processed using Flask and OpenCV to detect the food's shape and significant corners. If three corners are detected, their angles are analyzed to generate the Trimosa Score and verdict.*
 
 For Hardware:
 
@@ -82,16 +133,15 @@ For Hardware:
 
 ### Project Demo
 # Video
-[Add your demo video link here]
-*Explain what the video demonstrates*
+[(https://drive.google.com/file/d/1tZsVkTSZ6CENNhpf8S8V25zECZ7BJHGU/view?usp=drive_link)]
+*The demo video shows the complete working of Trimosa — uploading a food image, scanning and processing the image, detecting significant corners, analyzing the shape and corner angles, and displaying the final Trimosa score and verdict for a three-corner samosa.*
 
 # Additional Demos
 [Add any extra demo materials/links]
 
 ## Team Contributions
-- [Name 1]: [Specific contributions]
-- [Name 2]: [Specific contributions]
-- [Name 3]: [Specific contributions]
+- [Hana CK]: [Developed the frontend interface, UI/UX design, animations, testing, documentation, and project presentation.]
+- [Dhaniya KM]: [Developed the OpenCV-based image processing, shape and corner detection, angle calculations, and integration of the analysis system with the frontend.]
 
 ---
 Made with ❤️ at TinkerHub Useless Projects 
