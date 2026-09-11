@@ -47,16 +47,16 @@ For Software:
 For Software:
 
 # Screenshots (Add at least 3)
-(<img src="img4.png">)
+![Screenshot2](<img src="image4.png">)
 *Trimosa home page showing the image upload interface where users can upload a food image for shape and corner analysis.*
 
-![Screenshot2](<img src="img3.png">)
+![Screenshot2](<img src="image3.png">)
 *AImage preview and scanning stage, where Trimosa prepares the uploaded food image for computer vision analysis.*
 
-![Screenshot3](<img src="img2.png">)
+![Screenshot3](<img src="image2.png">)
 **Shape analysis result showing the detected significant corners and geometric information identified using OpenCV.*
 
-![Screenshot3](<img src="img1.png">)
+![Screenshot3](<img src="image1.png">)
 *Final Trimosa result displaying the detected corner count, shape classification, and analysis verdict.*
 
 # Diagrams
