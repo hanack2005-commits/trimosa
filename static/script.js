@@ -1,292 +1,1936 @@
 const LOADING_MESSAGES = [
-  "Locating suspicious corners...",
-  "Consulting the laws of geometry...",
-  "Questioning the chef's decisions...",
-  "Calculating unnecessary mathematics...",
-  "Inspecting triangular integrity...",
-  "Cross-examining the pastry for corner-related crimes...",
+    "Scanning Shape",
+    "Detecting outline",
+    "Searching for corners",
+    "Measuring corner angles",
+    "Comparing geometry",
+    "Consulting unnecessary mathematics"
 ];
 
-const CORNER_COLORS = { A: "#E11D48", B: "#D97706", C: "#0F9B8E" };
 
-const dropzone = document.getElementById("dropzone");
-const fileInput = document.getElementById("fileInput");
-const uploadBtn = document.getElementById("uploadBtn");
-const analyzeBtn = document.getElementById("analyzeBtn");
-const removeBtn = document.getElementById("removeBtn");
-const previewImg = document.getElementById("previewImg");
-const dzIdle = document.getElementById("dzIdle");
-const dzPreview = document.getElementById("dzPreview");
+const COLORS = [
+    "#e11d48",
+    "#d97706",
+    "#0f9b8e",
+    "#2563eb",
+    "#7c3aed",
+    "#db2777",
+    "#0891b2",
+    "#65a30d",
+    "#9333ea",
+    "#ea580c"
+];
 
-const loadingOverlay = document.getElementById("loadingOverlay");
-const loadingMsg = document.getElementById("loadingMsg");
 
-const errorCard = document.getElementById("errorCard");
-const errorMessage = document.getElementById("errorMessage");
-const dismissErrorBtn = document.getElementById("dismissErrorBtn");
+// ======================================================
+// ELEMENTS
+// ======================================================
 
-const results = document.getElementById("results");
-const scoreValue = document.getElementById("scoreValue");
-const bandEmoji = document.getElementById("bandEmoji");
-const bandName = document.getElementById("bandName");
-const verdictLine = document.getElementById("verdictLine");
-const resultCanvas = document.getElementById("resultCanvas");
-const legend = document.getElementById("legend");
-const totalAngle = document.getElementById("totalAngle");
-const statsList = document.getElementById("statsList");
-const devNote = document.getElementById("devNote");
-const againBtn = document.getElementById("againBtn");
+
+const fileInput =
+    document.getElementById("fileInput");
+
+
+const dropzone =
+    document.getElementById("dropzone");
+
+
+const uploadBtn =
+    document.getElementById("uploadBtn");
+
+
+const analyzeBtn =
+    document.getElementById("analyzeBtn");
+
+
+const removeBtn =
+    document.getElementById("removeBtn");
+
+
+const previewImg =
+    document.getElementById("previewImg");
+
+
+const dzIdle =
+    document.getElementById("dzIdle");
+
+
+const dzPreview =
+    document.getElementById("dzPreview");
+
+
+const errorCard =
+    document.getElementById("errorCard");
+
+
+const errorMessage =
+    document.getElementById("errorMessage");
+
+
+const dismissErrorBtn =
+    document.getElementById("dismissErrorBtn");
+
+
+const results =
+    document.getElementById("results");
+
+
+const cornerCount =
+    document.getElementById("cornerCount");
+
+
+const bandEmoji =
+    document.getElementById("bandEmoji");
+
+
+const bandName =
+    document.getElementById("bandName");
+
+
+const verdictLine =
+    document.getElementById("verdictLine");
+
+
+const triangleScoreCard =
+    document.getElementById("triangleScoreCard");
+
+
+const scoreValue =
+    document.getElementById("scoreValue");
+
+
+const resultCanvas =
+    document.getElementById("resultCanvas");
+
+
+const legend =
+    document.getElementById("legend");
+
+
+const triangleStats =
+    document.getElementById("triangleStats");
+
+
+const nonTriangleStats =
+    document.getElementById("nonTriangleStats");
+
+
+const statsList =
+    document.getElementById("statsList");
+
+
+const detectedCornerText =
+    document.getElementById("detectedCornerText");
+
+
+const againBtn =
+    document.getElementById("againBtn");
+
+
+const loadingOverlay =
+    document.getElementById("loadingOverlay");
+
+
+const loadingMsg =
+    document.getElementById("loadingMsg");
+
+
+// ======================================================
+// VARIABLES
+// ======================================================
+
 
 let selectedFile = null;
-let lastResult = null;
-let messageTimer = null;
 
-const ACCEPTED = ["image/jpeg", "image/png"];
-const MAX_BYTES = 8 * 1024 * 1024;
+let loadingTimer = null;
 
-dropzone.addEventListener("click", () => fileInput.click());
-uploadBtn.addEventListener("click", () => fileInput.click());
-dropzone.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" || e.key === " ") {
-    e.preventDefault();
-    fileInput.click();
-  }
-});
+let scanOverlay = null;
 
-fileInput.addEventListener("change", (e) => {
-  if (e.target.files.length) setFile(e.target.files[0]);
-});
 
-["dragenter", "dragover"].forEach((evt) =>
-  dropzone.addEventListener(evt, (e) => {
-    e.preventDefault();
-    dropzone.classList.add("dragover");
-  })
+const ACCEPTED_TYPES = [
+    "image/jpeg",
+    "image/png",
+    "image/webp"
+];
+
+
+const MAX_SIZE =
+    8 * 1024 * 1024;
+
+
+// ======================================================
+// FILE INPUT
+// ======================================================
+
+
+dropzone.addEventListener(
+    "click",
+    () => {
+
+        fileInput.click();
+
+    }
 );
-["dragleave", "drop"].forEach((evt) =>
-  dropzone.addEventListener(evt, (e) => {
-    e.preventDefault();
-    dropzone.classList.remove("dragover");
-  })
+
+
+uploadBtn.addEventListener(
+    "click",
+    () => {
+
+        fileInput.click();
+
+    }
 );
-dropzone.addEventListener("drop", (e) => {
-  const file = e.dataTransfer.files && e.dataTransfer.files[0];
-  if (file) setFile(file);
-});
 
-removeBtn.addEventListener("click", (e) => {
-  e.stopPropagation();
-  clearSelection();
-});
 
-analyzeBtn.addEventListener("click", () => {
-  if (selectedFile) runAnalysis();
-});
+fileInput.addEventListener(
+    "change",
+    event => {
 
-againBtn.addEventListener("click", resetToUpload);
-dismissErrorBtn.addEventListener("click", () => {
-  errorCard.hidden = true;
-});
+        if (
+            event.target.files.length
+        ) {
+
+            setFile(
+                event.target.files[0]
+            );
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// DRAG + DROP
+// ======================================================
+
+
+dropzone.addEventListener(
+    "dragover",
+    event => {
+
+        event.preventDefault();
+
+        dropzone.classList.add(
+            "dragover"
+        );
+
+    }
+);
+
+
+dropzone.addEventListener(
+    "dragleave",
+    event => {
+
+        event.preventDefault();
+
+        dropzone.classList.remove(
+            "dragover"
+        );
+
+    }
+);
+
+
+dropzone.addEventListener(
+    "drop",
+    event => {
+
+        event.preventDefault();
+
+        dropzone.classList.remove(
+            "dragover"
+        );
+
+
+        const file =
+            event.dataTransfer.files[0];
+
+
+        if (file) {
+
+            setFile(file);
+
+        }
+
+    }
+);
+
+
+// ======================================================
+// BUTTONS
+// ======================================================
+
+
+removeBtn.addEventListener(
+    "click",
+    event => {
+
+        event.stopPropagation();
+
+        clearFile();
+
+    }
+);
+
+
+analyzeBtn.addEventListener(
+    "click",
+    () => {
+
+        if (selectedFile) {
+
+            analyzeImage();
+
+        }
+
+    }
+);
+
+
+againBtn.addEventListener(
+    "click",
+    () => {
+
+        clearFile();
+
+        results.hidden = true;
+
+        errorCard.hidden = true;
+
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    }
+);
+
+
+dismissErrorBtn.addEventListener(
+    "click",
+    () => {
+
+        errorCard.hidden = true;
+
+    }
+);
+
+
+// ======================================================
+// SET FILE
+// ======================================================
+
 
 function setFile(file) {
-  if (!ACCEPTED.includes(file.type)) {
-    showError("That file type is not a samosa. JPG and PNG only. We don't make the rules.");
-    return;
-  }
-  if (file.size > MAX_BYTES) {
-    showError("That image is too large to judge. Please pick something under 8 MB.");
-    return;
-  }
-  selectedFile = file;
-  const url = URL.createObjectURL(file);
-  previewImg.src = url;
-  dzIdle.hidden = true;
-  dzPreview.hidden = false;
-  analyzeBtn.disabled = false;
-  errorCard.hidden = true;
-  results.hidden = true;
-}
 
-function clearSelection() {
-  selectedFile = null;
-  lastResult = null;
-  previewImg.src = "";
-  dzIdle.hidden = false;
-  dzPreview.hidden = true;
-  analyzeBtn.disabled = true;
-}
+    if (
+        !ACCEPTED_TYPES.includes(
+            file.type
+        )
+    ) {
 
-async function runAnalysis() {
-  showLoading();
+        showError(
+            "Please use JPG, PNG or WebP."
+        );
 
-  const form = new FormData();
-  form.append("image", selectedFile, selectedFile.name);
+        return;
 
-  try {
-    const response = await fetch("/api/analyze", { method: "POST", body: form });
-    const data = await response.json();
-    if (data.success) {
-      lastResult = data;
-      renderResults(data);
-    } else {
-      showError(data.error || "The samosa evaded detection entirely.");
     }
-  } catch (err) {
-    showError("The geometry department is unreachable. Is the server running?");
-  } finally {
-    hideLoading();
-  }
+
+
+    if (
+        file.size > MAX_SIZE
+    ) {
+
+        showError(
+            "Maximum image size is 8 MB."
+        );
+
+        return;
+
+    }
+
+
+    selectedFile = file;
+
+
+    previewImg.src =
+        URL.createObjectURL(
+            file
+        );
+
+
+    dzIdle.hidden = true;
+
+    dzPreview.hidden = false;
+
+
+    analyzeBtn.disabled = false;
+
+
+    errorCard.hidden = true;
+
+    results.hidden = true;
+
 }
+
+
+// ======================================================
+// CLEAR FILE
+// ======================================================
+
+
+function clearFile() {
+
+    selectedFile = null;
+
+
+    fileInput.value = "";
+
+
+    previewImg.src = "";
+
+
+    dzIdle.hidden = false;
+
+    dzPreview.hidden = true;
+
+
+    analyzeBtn.disabled = true;
+
+
+    removeScanAnimation();
+
+}
+
+
+// ======================================================
+// SCAN OVERLAY
+// ======================================================
+
+
+function startScanAnimation() {
+
+    removeScanAnimation();
+
+
+    dzPreview.classList.add(
+        "scanning"
+    );
+
+
+    scanOverlay =
+        document.createElement(
+            "div"
+        );
+
+
+    scanOverlay.className =
+        "scan-overlay";
+
+
+    scanOverlay.innerHTML = `
+
+        <div class="scan-line"></div>
+
+        <div class="scan-label">
+            Scanning Shape
+        </div>
+
+    `;
+
+
+    dzPreview.appendChild(
+        scanOverlay
+    );
+
+}
+
+
+function removeScanAnimation() {
+
+    dzPreview.classList.remove(
+        "scanning"
+    );
+
+
+    if (scanOverlay) {
+
+        scanOverlay.remove();
+
+        scanOverlay = null;
+
+    }
+
+}
+
+
+// ======================================================
+// ANALYZE
+// ======================================================
+
+
+async function analyzeImage() {
+
+    if (!selectedFile) {
+
+        return;
+
+    }
+
+
+    startScanAnimation();
+
+    showLoading();
+
+
+    const formData =
+        new FormData();
+
+
+    formData.append(
+        "image",
+        selectedFile,
+        selectedFile.name
+    );
+
+
+    /*
+       Small delay so the user can actually
+       see the scanning animation.
+    */
+
+    await wait(1200);
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/analyze",
+                {
+                    method: "POST",
+                    body: formData
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok) {
+
+            showError(
+                data.error ||
+                `Server error ${response.status}`
+            );
+
+            return;
+
+        }
+
+
+        if (!data.success) {
+
+            showError(
+                data.error ||
+                "Shape detection failed."
+            );
+
+            return;
+
+        }
+
+
+        /*
+          Let the scanner finish visually.
+        */
+
+        await wait(700);
+
+
+        renderResults(
+            data
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "TRIMOSA ERROR:",
+            error
+        );
+
+
+        showError(
+            "Could not reach Trimosa. Make sure python app.py is running."
+        );
+
+    }
+
+    finally {
+
+        removeScanAnimation();
+
+        hideLoading();
+
+    }
+
+}
+
+
+// ======================================================
+// WAIT HELPER
+// ======================================================
+
+
+function wait(milliseconds) {
+
+    return new Promise(
+        resolve =>
+            setTimeout(
+                resolve,
+                milliseconds
+            )
+    );
+
+}
+
+
+// ======================================================
+// LOADING
+// ======================================================
+
 
 function showLoading() {
-  let index = Math.floor(Math.random() * LOADING_MESSAGES.length);
-  loadingMsg.textContent = LOADING_MESSAGES[index];
-  messageTimer = setInterval(() => {
-    index = (index + 1) % LOADING_MESSAGES.length;
-    loadingMsg.textContent = LOADING_MESSAGES[index];
-  }, 1400);
-  loadingOverlay.hidden = false;
+
+    let index = 0;
+
+
+    loadingMsg.textContent =
+        LOADING_MESSAGES[index];
+
+
+    loadingTimer =
+        setInterval(
+            () => {
+
+                index =
+                    (
+                        index + 1
+                    )
+                    %
+                    LOADING_MESSAGES.length;
+
+
+                loadingMsg.textContent =
+                    LOADING_MESSAGES[index];
+
+            },
+            850
+        );
+
+
+    loadingOverlay.hidden =
+        false;
+
 }
+
 
 function hideLoading() {
-  clearInterval(messageTimer);
-  loadingOverlay.hidden = true;
+
+    clearInterval(
+        loadingTimer
+    );
+
+
+    loadingOverlay.hidden =
+        true;
+
 }
+
+
+// ======================================================
+// ERROR
+// ======================================================
+
 
 function showError(message) {
-  errorMessage.textContent = message;
-  errorCard.hidden = false;
-  errorCard.scrollIntoView({ behavior: "smooth", block: "center" });
+
+    errorMessage.textContent =
+        message;
+
+
+    errorCard.hidden =
+        false;
+
+
+    errorCard.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    });
+
 }
+
+
+// ======================================================
+// RESULT
+// ======================================================
+
 
 function renderResults(data) {
-  scoreValue.textContent = data.score.toFixed(1);
-  bandEmoji.textContent = data.band_emoji;
-  bandName.textContent = data.band;
-  verdictLine.textContent = `“${data.verdict}”`;
 
-  totalAngle.textContent = `${data.stats.total_angle.toFixed(1)}°`;
+    const resultHeader =
+        document.querySelector(
+            ".result-header"
+        );
 
-  legend.innerHTML = data.corners
-    .map(
-      (c) =>
-        `<span class="legend-item"><span class="legend-dot" style="background:${CORNER_COLORS[c.label]}"></span>Corner ${c.label} — ${c.angle.toFixed(1)}°</span>`
-    )
-    .join("");
 
-  const stats = {
-    "Total angle": `${data.stats.total_angle.toFixed(1)}°`,
-    "Sharpest corner": `${data.stats.sharpest.label}: ${data.stats.sharpest.angle.toFixed(1)}°`,
-    "Widest corner": `${data.stats.widest.label}: ${data.stats.widest.angle.toFixed(1)}°`,
-    "Average angle": `${data.stats.average_angle.toFixed(1)}°`,
-    "Deviation from perfect 60°": `${data.stats.deviation.toFixed(2)}° average`,
-    "Symmetry": `${data.stats.symmetry.toFixed(1)}%`,
-  };
-  statsList.innerHTML = Object.entries(stats)
-    .map(([label, value]) => `<li><span>${label}</span><span>${value}</span></li>`)
-    .join("");
+    resultHeader.classList.remove(
+        "matched",
+        "not-matched"
+    );
 
-  const signed = data.corners
-    .map((c) => `${c.label}: ${c.angle - 60 >= 0 ? "+" : "−"}${Math.abs(c.angle - 60).toFixed(1)}°`)
-    .join(", ");
-  devNote.innerHTML = `Each corner vs. the perfect 60°: <b>${signed}</b>. The corners have been notified of their shortcomings.`;
 
-  drawOverlay(data);
+    /*
+       For Trimosa:
+       exactly 3 detected corners = shape matched.
+    */
 
-  results.hidden = false;
-  results.scrollIntoView({ behavior: "smooth", block: "start" });
+    if (
+        data.corner_count === 3
+    ) {
+
+        resultHeader.classList.add(
+            "matched"
+        );
+
+    }
+
+    else {
+
+        resultHeader.classList.add(
+            "not-matched"
+        );
+
+    }
+
+
+    cornerCount.textContent =
+        data.corner_count;
+
+
+    /*
+       MATCHED / NOT MATCHED heading
+    */
+
+    if (
+        data.corner_count === 3
+    ) {
+
+        bandEmoji.textContent =
+            "✅";
+
+
+        bandName.textContent =
+            "MATCHED";
+
+
+        verdictLine.textContent =
+            "Shape matches the required 3-corner samosa geometry.";
+
+    }
+
+    else {
+
+        bandEmoji.textContent =
+            "✕";
+
+
+        bandName.textContent =
+            "NOT MATCHED";
+
+
+        verdictLine.textContent =
+            `${data.corner_count} significant corner${data.corner_count === 1 ? "" : "s"} detected. Required samosa shape: 3 corners.`;
+
+    }
+
+
+    // ==================================================
+    // CORNER LEGEND
+    // ==================================================
+
+
+    legend.innerHTML =
+        data.corners
+
+        .map(
+            (corner, index) => {
+
+                const color =
+                    COLORS[
+                        index %
+                        COLORS.length
+                    ];
+
+
+                let angleText = "";
+
+
+                if (
+                    corner.angle !== undefined &&
+                    Number(corner.angle) > 0
+                ) {
+
+                    angleText =
+                        ` · ${Number(corner.angle).toFixed(1)}°`;
+
+                }
+
+
+                let perfectionText = "";
+
+
+                if (
+                    corner.perfection !== undefined
+                ) {
+
+                    perfectionText =
+                        ` · ${Number(corner.perfection).toFixed(1)}%`;
+
+                }
+
+
+                return `
+
+                    <span
+                        class="legend-item"
+                        style="animation-delay:${index * 0.12}s"
+                    >
+
+                        <span
+                            class="legend-dot"
+                            style="
+                                background:${color};
+                                color:${color};
+                            "
+                        ></span>
+
+                        Corner ${corner.label}
+                        ${angleText}
+                        ${perfectionText}
+
+                    </span>
+
+                `;
+
+            }
+        )
+
+        .join("");
+
+
+    // ==================================================
+    // TRIANGLE / SAMOSA
+    // ==================================================
+
+
+    if (
+        data.is_triangle &&
+        data.score !== null &&
+        data.score !== undefined &&
+        data.stats
+    ) {
+
+        triangleScoreCard.hidden =
+            false;
+
+
+        triangleStats.hidden =
+            false;
+
+
+        nonTriangleStats.hidden =
+            true;
+
+
+        /*
+           Count score from zero.
+        */
+
+        animateScore(
+            Number(
+                data.score
+            )
+        );
+
+
+        statsList.innerHTML = `
+
+            <li>
+
+                <span>
+                    Shape comparison
+                </span>
+
+                <strong>
+                    MATCHED ✓
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Corners detected
+                </span>
+
+                <strong>
+                    3
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Ideal samosa angles
+                </span>
+
+                <strong>
+                    60° · 60° · 60°
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Total angle
+                </span>
+
+                <strong>
+                    ${Number(data.stats.total_angle).toFixed(1)}°
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Average angle
+                </span>
+
+                <strong>
+                    ${Number(data.stats.average_angle).toFixed(1)}°
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Sharpest corner
+                </span>
+
+                <strong>
+
+                    ${data.stats.sharpest.label}
+
+                    ·
+
+                    ${Number(data.stats.sharpest.angle).toFixed(1)}°
+
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Widest corner
+                </span>
+
+                <strong>
+
+                    ${data.stats.widest.label}
+
+                    ·
+
+                    ${Number(data.stats.widest.angle).toFixed(1)}°
+
+                </strong>
+
+            </li>
+
+
+            <li>
+
+                <span>
+                    Symmetry
+                </span>
+
+                <strong>
+                    ${Number(data.stats.symmetry).toFixed(1)}%
+                </strong>
+
+            </li>
+
+        `;
+
+    }
+
+
+    // ==================================================
+    // NON TRIANGLE
+    // ==================================================
+
+
+    else {
+
+        triangleScoreCard.hidden =
+            true;
+
+
+        triangleStats.hidden =
+            true;
+
+
+        nonTriangleStats.hidden =
+            false;
+
+
+        detectedCornerText.textContent =
+            data.corner_count;
+
+
+        const details =
+            data.corners
+
+            .map(
+                corner => {
+
+                    const angle =
+                        Number(corner.angle) > 0
+                        ?
+                        `${Number(corner.angle).toFixed(1)}°`
+                        :
+                        "—";
+
+
+                    const perfection =
+                        corner.perfection !== undefined
+                        ?
+                        `${Number(corner.perfection).toFixed(1)}%`
+                        :
+                        "—";
+
+
+                    return `
+
+                        <li>
+
+                            <span>
+                                Corner ${corner.label}
+                            </span>
+
+                            <strong>
+                                ${angle}
+                            </strong>
+
+                        </li>
+
+
+                        <li>
+
+                            <span>
+                                Corner ${corner.label} perfection
+                            </span>
+
+                            <strong>
+                                ${perfection}
+                            </strong>
+
+                        </li>
+
+                    `;
+
+                }
+            )
+
+            .join("");
+
+
+        nonTriangleStats.innerHTML = `
+
+            <p class="non-triangle-message">
+
+                <strong>
+                    NOT MATCHED ✕
+                </strong>
+
+                <br><br>
+
+                Required samosa shape:
+                <strong>
+                    3 significant corners.
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Detected:
+
+                <strong>
+                    ${data.corner_count}
+                </strong>
+
+                corner${data.corner_count === 1 ? "" : "s"}.
+
+            </p>
+
+
+            ${
+                data.corners.length
+                ?
+                `
+
+                    <ul class="stats-list">
+
+                        ${details}
+
+                    </ul>
+
+                `
+                :
+                ""
+            }
+
+        `;
+
+    }
+
+
+    // ==================================================
+    // DRAW ANIMATED OVERLAY
+    // ==================================================
+
+
+    drawOverlayAnimated(
+        data
+    );
+
+
+    results.hidden =
+        false;
+
+
+    results.classList.remove(
+        "result-enter"
+    );
+
+
+    void results.offsetWidth;
+
+
+    results.classList.add(
+        "result-enter"
+    );
+
+
+    results.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
+
 }
 
-function drawOverlay(data) {
-  const canvas = resultCanvas;
-  const ctx = canvas.getContext("2d");
-  const img = previewImg;
 
-  const render = () => {
-    const panel = results.querySelector(".image-panel");
-    const maxW = (panel.clientWidth || 640) - 10;
-    const W = data.image_width;
-    const H = data.image_height;
-    const displayW = Math.min(maxW, W);
-    const k = displayW / W;
+// ======================================================
+// SCORE COUNT UP
+// ======================================================
 
-    canvas.width = Math.round(W * k);
-    canvas.height = Math.round(H * k);
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+function animateScore(finalScore) {
 
-    const pts = data.corners.map((c) => ({ x: c.x * k, y: c.y * k }));
+    const duration =
+        1000;
+
+
+    const start =
+        performance.now();
+
+
+    const scoreContainer =
+        scoreValue.parentElement;
+
+
+    scoreContainer.classList.remove(
+        "score-pop"
+    );
+
+
+    void scoreContainer.offsetWidth;
+
+
+    scoreContainer.classList.add(
+        "score-pop"
+    );
+
+
+    function update(now) {
+
+        const elapsed =
+            now - start;
+
+
+        const progress =
+            Math.min(
+                elapsed / duration,
+                1
+            );
+
+
+        /*
+           Ease-out animation
+        */
+
+        const eased =
+            1 -
+            Math.pow(
+                1 - progress,
+                3
+            );
+
+
+        const value =
+            finalScore *
+            eased;
+
+
+        scoreValue.textContent =
+            value.toFixed(1);
+
+
+        if (
+            progress < 1
+        ) {
+
+            requestAnimationFrame(
+                update
+            );
+
+        }
+
+    }
+
+
+    requestAnimationFrame(
+        update
+    );
+
+}
+
+
+// ======================================================
+// ANIMATED CANVAS
+// ======================================================
+
+
+function drawOverlayAnimated(data) {
+
+    const canvas =
+        resultCanvas;
+
+
+    const ctx =
+        canvas.getContext(
+            "2d"
+        );
+
+
+    const image =
+        previewImg;
+
+
+    function startDrawing() {
+
+        const parent =
+            canvas.parentElement;
+
+
+        const maxWidth =
+            parent.clientWidth - 20;
+
+
+        const originalWidth =
+            Number(
+                data.image_width
+            );
+
+
+        const originalHeight =
+            Number(
+                data.image_height
+            );
+
+
+        const displayWidth =
+            Math.min(
+                maxWidth,
+                originalWidth
+            );
+
+
+        const scale =
+            displayWidth /
+            originalWidth;
+
+
+        canvas.width =
+            Math.round(
+                originalWidth *
+                scale
+            );
+
+
+        canvas.height =
+            Math.round(
+                originalHeight *
+                scale
+            );
+
+
+        const points =
+            data.corners.map(
+                corner => ({
+                    x:
+                        Number(corner.x) *
+                        scale,
+
+                    y:
+                        Number(corner.y) *
+                        scale
+                })
+            );
+
+
+        let progress =
+            0;
+
+
+        const duration =
+            1100;
+
+
+        let startTime =
+            null;
+
+
+        function animate(time) {
+
+            if (!startTime) {
+
+                startTime =
+                    time;
+
+            }
+
+
+            progress =
+                Math.min(
+                    (
+                        time -
+                        startTime
+                    )
+                    /
+                    duration,
+                    1
+                );
+
+
+            ctx.clearRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            ctx.drawImage(
+                image,
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            /*
+               Dark computer vision tint
+            */
+
+            ctx.fillStyle =
+                "rgba(0,20,30,0.09)";
+
+
+            ctx.fillRect(
+                0,
+                0,
+                canvas.width,
+                canvas.height
+            );
+
+
+            if (
+                points.length >= 2
+            ) {
+
+                drawProgressivePolygon(
+                    ctx,
+                    points,
+                    progress,
+                    data.corner_count === 3
+                );
+
+            }
+
+
+            drawProgressiveCorners(
+                ctx,
+                data,
+                points,
+                progress
+            );
+
+
+            if (
+                progress < 1
+            ) {
+
+                requestAnimationFrame(
+                    animate
+                );
+
+            }
+
+        }
+
+
+        requestAnimationFrame(
+            animate
+        );
+
+    }
+
+
+    if (
+        image.complete &&
+        image.naturalWidth
+    ) {
+
+        startDrawing();
+
+    }
+
+    else {
+
+        image.onload =
+            startDrawing;
+
+    }
+
+}
+
+
+// ======================================================
+// POLYGON DRAWING
+// ======================================================
+
+
+function drawProgressivePolygon(
+    ctx,
+    points,
+    progress,
+    matched
+) {
+
+    const totalSegments =
+        points.length;
+
+
+    const amount =
+        progress *
+        totalSegments;
+
 
     ctx.beginPath();
-    ctx.moveTo(pts[0].x, pts[0].y);
-    pts.slice(1).forEach((p) => ctx.lineTo(p.x, p.y));
-    ctx.closePath();
-    ctx.fillStyle = "rgba(245, 183, 35, 0.22)";
-    ctx.fill();
-    ctx.strokeStyle = "#E8590C";
-    ctx.lineWidth = 4;
-    ctx.lineJoin = "round";
+
+
+    ctx.moveTo(
+        points[0].x,
+        points[0].y
+    );
+
+
+    for (
+        let i = 0;
+        i < totalSegments;
+        i++
+    ) {
+
+        const segmentProgress =
+            Math.max(
+                0,
+                Math.min(
+                    1,
+                    amount - i
+                )
+            );
+
+
+        if (
+            segmentProgress <= 0
+        ) {
+
+            break;
+
+        }
+
+
+        const start =
+            points[i];
+
+
+        const end =
+            points[
+                (i + 1)
+                %
+                points.length
+            ];
+
+
+        const x =
+            start.x +
+            (
+                end.x -
+                start.x
+            )
+            *
+            segmentProgress;
+
+
+        const y =
+            start.y +
+            (
+                end.y -
+                start.y
+            )
+            *
+            segmentProgress;
+
+
+        ctx.lineTo(
+            x,
+            y
+        );
+
+    }
+
+
+    ctx.strokeStyle =
+        matched
+        ?
+        "#22c55e"
+        :
+        "#ef4444";
+
+
+    ctx.lineWidth =
+        4;
+
+
+    ctx.lineJoin =
+        "round";
+
+
+    ctx.shadowColor =
+        matched
+        ?
+        "#22c55e"
+        :
+        "#ef4444";
+
+
+    ctx.shadowBlur =
+        16;
+
+
     ctx.stroke();
 
-    const cx = (pts[0].x + pts[1].x + pts[2].x) / 3;
-    const cy = (pts[0].y + pts[1].y + pts[2].y) / 3;
 
-    data.corners.forEach((c, i) => {
-      const p = pts[i];
-      const angle = Math.atan2(p.y - cy, p.x - cx);
-      const labelX = p.x + Math.cos(angle) * 34;
-      const labelY = p.y + Math.sin(angle) * 34;
-      const color = CORNER_COLORS[c.label];
+    ctx.shadowBlur =
+        0;
 
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, 9, 0, Math.PI * 2);
-      ctx.fillStyle = color;
-      ctx.fill();
-      ctx.lineWidth = 3;
-      ctx.strokeStyle = "#fff";
-      ctx.stroke();
 
-      ctx.font = "800 15px 'Baloo 2', 'Nunito', sans-serif";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      const text = `${c.label} · ${c.angle.toFixed(1)}°`;
-      const metrics = ctx.measureText(text);
-      const boxW = metrics.width + 14;
-      const boxH = 22;
-      const bx = labelX - boxW / 2;
-      const by = labelY - boxH / 2;
+    /*
+       Fill only when finished
+    */
 
-      ctx.fillStyle = "rgba(59, 43, 26, 0.88)";
-      const r = 7;
-      ctx.beginPath();
-      ctx.moveTo(bx + r, by);
-      ctx.lineTo(bx + boxW - r, by);
-      ctx.quadraticCurveTo(bx + boxW, by, bx + boxW, by + r);
-      ctx.lineTo(bx + boxW, by + boxH - r);
-      ctx.quadraticCurveTo(bx + boxW, by + boxH, bx + boxW - r, by + boxH);
-      ctx.lineTo(bx + r, by + boxH);
-      ctx.quadraticCurveTo(bx, by + boxH, bx, by + boxH - r);
-      ctx.lineTo(bx, by + r);
-      ctx.quadraticCurveTo(bx, by, bx + r, by);
-      ctx.closePath();
-      ctx.fill();
+    if (
+        progress > 0.95 &&
+        points.length >= 3
+    ) {
 
-      ctx.fillStyle = "#fff";
-      ctx.fillText(text, labelX, labelY + 1);
-    });
-  };
+        ctx.beginPath();
 
-  if (img.complete && img.naturalWidth) {
-    requestAnimationFrame(render);
-  } else {
-    img.onload = () => requestAnimationFrame(render);
-  }
+
+        ctx.moveTo(
+            points[0].x,
+            points[0].y
+        );
+
+
+        for (
+            let i = 1;
+            i < points.length;
+            i++
+        ) {
+
+            ctx.lineTo(
+                points[i].x,
+                points[i].y
+            );
+
+        }
+
+
+        ctx.closePath();
+
+
+        ctx.fillStyle =
+            matched
+            ?
+            "rgba(34,197,94,0.12)"
+            :
+            "rgba(239,68,68,0.10)";
+
+
+        ctx.fill();
+
+    }
+
 }
 
-function resetToUpload() {
-  clearSelection();
-  results.hidden = true;
-  errorCard.hidden = true;
-  window.scrollTo({ top: 0, behavior: "smooth" });
+
+// ======================================================
+// CORNER MARKERS
+// ======================================================
+
+
+function drawProgressiveCorners(
+    ctx,
+    data,
+    points,
+    progress
+) {
+
+    data.corners.forEach(
+        (corner, index) => {
+
+            const revealPoint =
+                (
+                    index + 1
+                )
+                /
+                (
+                    data.corners.length + 1
+                );
+
+
+            if (
+                progress <
+                revealPoint
+            ) {
+
+                return;
+
+            }
+
+
+            const localProgress =
+                Math.min(
+                    (
+                        progress -
+                        revealPoint
+                    )
+                    *
+                    8,
+                    1
+                );
+
+
+            const point =
+                points[index];
+
+
+            const color =
+                data.corner_count === 3
+                ?
+                "#22c55e"
+                :
+                COLORS[
+                    index %
+                    COLORS.length
+                ];
+
+
+            const radius =
+                10 *
+                localProgress;
+
+
+            /*
+               Glow
+            */
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                point.x,
+                point.y,
+                radius + 6,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fillStyle =
+                hexToRGBA(
+                    color,
+                    0.18
+                );
+
+
+            ctx.fill();
+
+
+            /*
+               Actual marker
+            */
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                point.x,
+                point.y,
+                radius,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fillStyle =
+                color;
+
+
+            ctx.shadowColor =
+                color;
+
+
+            ctx.shadowBlur =
+                18;
+
+
+            ctx.fill();
+
+
+            ctx.shadowBlur =
+                0;
+
+
+            ctx.strokeStyle =
+                "#ffffff";
+
+
+            ctx.lineWidth =
+                3;
+
+
+            ctx.stroke();
+
+
+            if (
+                localProgress <
+                0.8
+            ) {
+
+                return;
+
+            }
+
+
+            let label =
+                `Corner ${corner.label}`;
+
+
+            if (
+                Number(corner.angle) > 0
+            ) {
+
+                label +=
+                    ` · ${Number(corner.angle).toFixed(1)}°`;
+
+            }
+
+
+            ctx.font =
+                "800 15px Nunito, sans-serif";
+
+
+            ctx.textAlign =
+                "center";
+
+
+            ctx.textBaseline =
+                "middle";
+
+
+            const width =
+                ctx.measureText(
+                    label
+                ).width +
+                16;
+
+
+            const height =
+                26;
+
+
+            let labelX =
+                point.x;
+
+
+            let labelY =
+                point.y - 32;
+
+
+            if (
+                labelY <
+                25
+            ) {
+
+                labelY =
+                    point.y + 34;
+
+            }
+
+
+            labelX =
+                Math.max(
+                    width / 2,
+                    Math.min(
+                        canvas.width -
+                        width / 2,
+                        labelX
+                    )
+                );
+
+
+            ctx.fillStyle =
+                "rgba(8,25,32,0.88)";
+
+
+            ctx.fillRect(
+                labelX -
+                width / 2,
+                labelY -
+                height / 2,
+                width,
+                height
+            );
+
+
+            ctx.fillStyle =
+                "#ffffff";
+
+
+            ctx.fillText(
+                label,
+                labelX,
+                labelY
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================================
+// COLOR HELPER
+// ======================================================
+
+
+function hexToRGBA(
+    hex,
+    alpha
+) {
+
+    const value =
+        hex.replace(
+            "#",
+            ""
+        );
+
+
+    const r =
+        parseInt(
+            value.substring(
+                0,
+                2
+            ),
+            16
+        );
+
+
+    const g =
+        parseInt(
+            value.substring(
+                2,
+                4
+            ),
+            16
+        );
+
+
+    const b =
+        parseInt(
+            value.substring(
+                4,
+                6
+            ),
+            16
+        );
+
+
+    return `rgba(${r},${g},${b},${alpha})`;
+
 }
