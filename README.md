@@ -47,7 +47,7 @@ For Software:
 For Software:
 
 # Screenshots (Add at least 3)
-![Screenshot1](<img src="img4.png">)
+(<img src="img4.png">)
 *Trimosa home page showing the image upload interface where users can upload a food image for shape and corner analysis.*
 
 ![Screenshot2](<img src="img3.png">)
